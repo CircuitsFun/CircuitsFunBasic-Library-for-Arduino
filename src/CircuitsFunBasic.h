@@ -52,6 +52,8 @@
 #define Rw B00000010  // Read/Write bit
 #define Rs B00000001  // Register select bit
 
+#define HIGH 0x1
+
 class LCD : public Print {
 public:
   LCD();
@@ -127,5 +129,26 @@ private:
   uint8_t _rows;
   uint8_t _backlightval;
 };
+
+class Button {
+	public:
+		Button(int pin=8,bool pressedValue=HIGH);
+		void begin();
+		bool pressed(int timeout=0);
+		bool released(int timeout=0);
+		bool doublePressed(int timeout=0,int tolerance=500);
+
+		bool isPressed();
+		virtual bool getState();
+
+	protected:
+		int pin;
+		bool pressedValue;
+		bool lastState;
+		long debounceTime;
+		bool checkPress(int timeout, bool requiredState);
+
+};
+
 
 #endif
